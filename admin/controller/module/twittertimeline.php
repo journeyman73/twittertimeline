@@ -1,22 +1,17 @@
 <?php
-################################################################################################
-#  DIY Module Builder for Opencart 1.5.1.x From HostJars http://opencart.hostjars.com  		   #
-################################################################################################
+
 class ControllerModuleTwittertimeline extends Controller {
 	
 	private $error = array(); 
 	
 	public function index() {   
-		//Load the language file for this module
+
 		$this->load->language('module/twittertimeline');
 
-		//Set the title from the language file $_['heading_title'] string
 		$this->document->setTitle($this->language->get('heading_title'));
 		
-		//Load the settings model. You can also add any other models you want to load here.
 		$this->load->model('setting/setting');
 		
-		//Save the settings if the user has submitted the admin form (ie if someone has pressed save).
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('twittertimeline', $this->request->post);		
 					
@@ -63,17 +58,6 @@ class ControllerModuleTwittertimeline extends Controller {
 		$this->data['button_add_module'] = $this->language->get('button_add_module');
     $this->data['button_remove'] = $this->language->get('button_remove');
 
-
-		//END LANGUAGE
-		
-		//The following code pulls in the required data from either config files or user
-		//submitted data (when the user presses save in admin). Add any extra config data
-		// you want to store.
-		//
-		// NOTE: These must have the same names as the form data in your my_module.tpl file
-		//
-	
-		//This creates an error message. The error['warning'] variable is set by the call to function validate() in this controller (below)
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
@@ -125,7 +109,6 @@ class ControllerModuleTwittertimeline extends Controller {
 			$this->data['error_twitter_include_rts'] = '';
 		}
 		
-		//SET UP BREADCRUMB TRAIL. YOU WILL NOT NEED TO MODIFY THIS UNLESS YOU CHANGE YOUR MODULE NAME.
 		$this->data['breadcrumbs'] = array();
 
 		$this->data['breadcrumbs'][] = array(
@@ -222,23 +205,15 @@ class ControllerModuleTwittertimeline extends Controller {
 			$this->data['config_twitter_include_rts'] = $this->config->get('config_twitter_include_rts');
 		}
 
-		//Choose which template file will be used to display this request.
 		$this->template = 'module/twittertimeline.tpl';
 		$this->children = array(
 			'common/header',
 			'common/footer',
 		);
 
-		//Send the output.
 		$this->response->setOutput($this->render());
 	}
 	
-	/*
-	 * 
-	 * This function is called to ensure that the settings chosen by the admin user are allowed/valid.
-	 * You can add checks in here of your own.
-	 * 
-	 */
 	private function validate() {
 		if (!$this->user->hasPermission('modify', 'module/twittertimeline')) {
 			$this->error['warning'] = $this->language->get('error_permission');
